@@ -6,6 +6,14 @@ def listdir_nohidden(path):
         if not f.startswith('.'):
             yield f
 
+def str_size(nbyte):
+    k = 0
+    while nbyte >> (k + 10):
+        k += 10
+    units = ("B", "KB", "MB", "GB")
+    size_by_unit = round(nbyte / (1 << k), 2) if k else nbyte
+    return str(size_by_unit) + units[k // 10]
+
 class Tree():
     mode_descriptions = {
         'df': 'Directory First',
@@ -15,7 +23,7 @@ class Tree():
     }
 
     def __init__(self, path, indent=4, mode='ff', sparse=True, dtail='/',
-        show_hidden=False):
+        show_hidden=False, show_size=False):
         self.sparse = sparse
         self.dtail = dtail
         self.indent_space = ' ' * indent
@@ -30,6 +38,7 @@ class Tree():
             'od': self.od
         }
         self.listdir = os.listdir if show_hidden else listdir_nohidden
+        self.show_size = show_size
 
         self.chmod(mode)
         self.generate(path)
@@ -49,40 +58,61 @@ class Tree():
         self.mode = self.mode_descriptions[mode]
 
     def generate(self, path):
+        """
+        metadata: [(path, isfile?, size) or None], maybe use to open file
+        size: file size, or number of files in a Directory, is a string
+        """
         path = os.path.abspath(path)
         assert os.path.isdir(path)
-        self.tree = path + '\n'
+        self.metadata = []
+        self.lines = [path]
         self.traverse(path, '')
-        if self.sparse:
-            self.tree = self.tree.rstrip('\n') + '\n'
+
+        if self.lines[-1] == '':
+            self.lines.pop()
+            self.metadata.pop()
+
+        if self.show_size:
+            sep = self.indent_space or ' '
+            size_len = max(len(md[2]) for md in self.metadata if md)
+            for i, mdata in enumerate(self.metadata):
+                size = mdata[2] if mdata else ' '
+                size = '%*s' % (size_len, size)
+                self.lines[i] = size + sep + self.lines[i]
+
+        self.tree = '\n'.join(self.lines) + '\n'
 
     def get_dirs_files(self, dirpath):
         dirs, files = [], []
         for leaf in self.listdir(dirpath):
             path = os.path.join(dirpath, leaf)
             if os.path.isfile(path):
-                files.append(leaf)
+                files.append((leaf, path))
             else:
                 dirs.append((leaf, path))
+        self.metadata.append((dirpath, False, str(len(dirs) + len(files))))
 
         return dirs, files
 
     def add_dirs(self, dirs, prefix, fprefix, dprefix, recursive):
         for dirname, path in dirs[:-1]:
-            self.tree += dprefix + dirname + self.dtail + '\n'
+            self.lines.append(dprefix + dirname + self.dtail)
             recursive(path, fprefix)
 
         dirname, path = dirs[-1]
         fprefix = prefix + self.indent_space
         dprefix = prefix + self.turn_horiz
-        self.tree += dprefix + dirname + self.dtail + '\n'
+        self.lines.append(dprefix + dirname + self.dtail)
         recursive(path, fprefix)
 
     def add_files(self, files, fprefix):
-        for file in files:
-            self.tree += fprefix + file + '\n'
+        for filename, path in files:
+            size = str_size(os.path.getsize(path))
+            self.lines.append(fprefix + filename)
+            self.metadata.append((path, True, size))
         if self.sparse and files:
-            self.tree += fprefix.rstrip() + '\n'
+            self.lines.append(fprefix.rstrip())
+            self.metadata.append(None)
 
     def df(self, dirpath, prefix):
         dirs, files = self.get_dirs_files(dirpath)
@@ -101,6 +131,7 @@ class Tree():
             path = os.path.join(dirpath, leaf)
             if os.path.isdir(path):
                 dirs.append((leaf, path))
+        self.metadata.append((dirpath, False, str(len(dirs))))
         if dirs:
             fprefix = prefix + self.down_space
             dprefix = prefix + self.vert_horiz
@@ -117,25 +148,27 @@ class Tree():
             self.add_files(files, prefix + self.indent_space)
 
     def od(self, dirpath, prefix):
+        def add_leaf(leaf):
+            path = os.path.join(dirpath, leaf)
+            if os.path.isfile(path):
+                size = str_size(os.path.getsize(path))
+                self.lines.append(dprefix + leaf)
+                self.metadata.append((path, True, size))
+            if os.path.isdir(path):
+                self.lines.append(dprefix + leaf + self.dtail)
+                self.od(path, fprefix)
+
         leaves = sorted(self.listdir(dirpath))
+        self.metadata.append((dirpath, False, str(len(leaves))))
+
         if not leaves:
             return
+
         fprefix = prefix + self.down_space
         dprefix = prefix + self.vert_horiz
         for leaf in leaves[:-1]:
-            path = os.path.join(dirpath, leaf)
-            if os.path.isfile(path):
-                self.tree += dprefix + leaf + '\n'
-            if os.path.isdir(path):
-                self.tree += dprefix + leaf + self.dtail + '\n'
-                self.od(path, fprefix)
+            add_leaf(leaf)
 
-        leaf = leaves[-1]
-        path = os.path.join(dirpath, leaf)
         fprefix = prefix + self.indent_space
         dprefix = prefix + self.turn_horiz
-        if os.path.isfile(path):
-            self.tree += dprefix + leaf + '\n'
-        if os.path.isdir(path):
-            self.tree += dprefix + leaf + self.dtail + '\n'
-            self.od(path, fprefix)
+        add_leaf(leaves[-1])

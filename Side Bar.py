@@ -8,13 +8,7 @@ class SidebarMakeTreeCommand(sublime_plugin.WindowCommand):
     def get_tree_settings(self):
         settings = sublime.load_settings(
             'SublimeDirectoryTree.sublime-settings')
-        tree_settings = settings.get('args', {
-            "mode": "ff",
-            "indent": 4,
-            "sparse": False,
-            "show_hidden": False,
-            "dir_tail_character": ""
-        })
+        tree_settings = settings.get('args', { "dir_tail_character": "/" })
         tree_settings['dtail'] = tree_settings.pop("dir_tail_character")
         return tree_settings
 
