@@ -1,7 +1,12 @@
 %YAML 1.2
 ---
 # See http://www.sublimetext.com/docs/3/syntax.html
-scope: text.code-counter
+scope: text.tree
+
+file_extensions:
+- tr
+
+first_line_match: mode:\s*[\w\s]+$
 
 variables:
   regex_path: (\w:)?[^\"\n:|*<?>]+
@@ -15,33 +20,33 @@ contexts:
   main:
     - match: (ROOTDIR)(:)(\s+({{regex_path}}))?$
       captures:
-        1: keyword.rootdir.code-counter
-        2: punctuation.separator.code-counter
-        3: entity.name.filename.code-counter
+        1: keyword.rootdir.tree
+        2: punctuation.separator.tree
+        3: entity.name.filename.tree
 
     - match: (Time)(:)\s*([0-9/:]+)
       captures:
-        1: keyword.time.code-counter
-        2: punctuation.separator.code-counter
-        3: string.time.code-counter
+        1: keyword.time.tree
+        2: punctuation.separator.tree
+        3: string.time.tree
 
     - include: tab-header
 
   tab-header:
     - match: (Languages)│{{tab_caption}}
       captures:
-        1: keyword.title.code-counter
-        2: keyword.title.code-counter
-        3: keyword.title.code-counter
-        4: keyword.title.code-counter
+        1: keyword.title.tree
+        2: keyword.title.tree
+        3: keyword.title.tree
+        4: keyword.title.tree
       push: languages
 
     - match: (Types)│{{tab_caption}}
       captures:
-        1: keyword.title.code-counter
-        2: keyword.title.code-counter
-        3: keyword.title.code-counter
-        4: keyword.title.code-counter
+        1: keyword.title.tree
+        2: keyword.title.tree
+        3: keyword.title.tree
+        4: keyword.title.tree
       push: filetypes
 
   languages:
@@ -52,11 +57,11 @@ contexts:
 
     - match: '{{regex_ident}}│{{tab_content}}'
       captures:
-        1: entity.name.language.code-counter
-        3: constant.numeric.code-counter
-        4: string.unit.code-counter
-        5: constant.numeric.code-counter
-        6: constant.numeric.code-counter
+        1: entity.name.language.tree
+        3: constant.numeric.tree
+        4: string.unit.tree
+        5: constant.numeric.tree
+        6: constant.numeric.tree
 
   filetypes:
     - match: ^═.+
@@ -66,34 +71,34 @@ contexts:
 
     - match: '{{regex_ident}}│{{tab_content}}'
       captures:
-        1: entity.name.filetype.code-counter
-        3: constant.numeric.code-counter
-        4: string.unit.code-counter
-        5: constant.numeric.code-counter
-        6: constant.numeric.code-counter
+        1: entity.name.filetype.tree
+        3: constant.numeric.tree
+        4: string.unit.tree
+        5: constant.numeric.tree
+        6: constant.numeric.tree
 
   summary:
     - match: (Total)│{{tab_content}}
       captures:
-        1: keyword.title.code-counter
-        2: constant.numeric.code-counter
-        3: string.unit.code-counter
-        4: constant.numeric.code-counter
-        5: constant.numeric.code-counter
+        1: keyword.title.tree
+        2: constant.numeric.tree
+        3: string.unit.tree
+        4: constant.numeric.tree
+        5: constant.numeric.tree
 
   paths-caption:
     - match: (Size)│\s*(Lines)│\s*(Paths)
       captures:
-        1: keyword.title.code-counter
-        2: keyword.title.code-counter
-        3: keyword.title.code-counter
+        1: keyword.title.tree
+        2: keyword.title.tree
+        3: keyword.title.tree
       push: paths-content
 
   paths-content:
     - match: ^\s*{{regex_2cols}}│\s+({{regex_path}})$
       captures:
-        1: constant.numeric.code-counter
-        2: string.unit.code-counter
-        3: constant.numeric.code-counter
-        4: entity.name.filename.code-counter
+        1: constant.numeric.tree
+        2: string.unit.tree
+        3: constant.numeric.tree
+        4: entity.name.filename.tree
 
