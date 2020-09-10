@@ -18,8 +18,10 @@ class Tree():
         show_hidden=False):
         self.sparse = sparse
         self.dtail = dtail
-        self.space = ' ' * indent
-        self.line = '─' * indent
+        self.indent_space = ' ' * indent
+        self.down_space = '│' + ' ' * (indent - 1)
+        self.vert_horiz = '├' + '─' * (indent - 1)
+        self.turn_horiz = '└' + '─' * (indent - 1)
 
         self.traverses = {
             'df': self.df,
@@ -34,7 +36,7 @@ class Tree():
 
     def write(self, filename):
         with open(filename, 'w+', encoding='utf-8') as fd:
-            fd.write('mode: %s\n' % self.mode_descriptions[self.mode])
+            fd.write('mode: %s\n' % self.mode)
             fd.write('\n')
             fd.write(self.tree)
 
@@ -44,7 +46,7 @@ class Tree():
     def chmod(self, mode):
         assert mode in self.traverses
         self.traverse = self.traverses[mode]
-        self.mode = mode
+        self.mode = self.mode_descriptions[mode]
 
     def generate(self, path):
         path = os.path.abspath(path)
@@ -69,8 +71,8 @@ class Tree():
             recursive(path, fprefix)
 
         dirname, path = dirs[-1]
-        fprefix = prefix + ' ' + self.space
-        dprefix = prefix + '└' + self.line
+        fprefix = prefix + self.indent_space
+        dprefix = prefix + self.turn_horiz
         self.tree += dprefix + dirname + self.dtail + '\n'
         recursive(path, fprefix)
 
@@ -83,13 +85,13 @@ class Tree():
     def df(self, dirpath, prefix):
         dirs, files = self.get_dirs_files(dirpath)
         if dirs:
-            fprefix = prefix + '│' + self.space
-            dprefix = prefix + '├' + self.line
+            fprefix = prefix + self.down_space
+            dprefix = prefix + self.vert_horiz
             self.add_dirs(dirs, prefix, fprefix, dprefix, self.df)
-            self.add_files(files, prefix + ' ' + self.space)
+            self.add_files(files, prefix + self.indent_space)
 
         else:
-            self.add_files(files, prefix + self.space)
+            self.add_files(files, prefix + self.indent_space)
 
     def do(self, dirpath, prefix):
         dirs = []
@@ -98,26 +100,26 @@ class Tree():
             if os.path.isdir(path):
                 dirs.append((leaf, path))
         if dirs:
-            fprefix = prefix + '│' + self.space
-            dprefix = prefix + '├' + self.line
+            fprefix = prefix + self.down_space
+            dprefix = prefix + self.vert_horiz
             self.add_dirs(dirs, prefix, fprefix, dprefix, self.do)
 
     def ff(self, dirpath, prefix):
         dirs, files = self.get_dirs_files(dirpath)
         if dirs:
-            fprefix = prefix + '│' + self.space
-            dprefix = prefix + '├' + self.line
+            fprefix = prefix + self.down_space
+            dprefix = prefix + self.vert_horiz
             self.add_files(files, fprefix)
             self.add_dirs(dirs, prefix, fprefix, dprefix, self.ff)
         else:
-            self.add_files(files, prefix + self.space)
+            self.add_files(files, prefix + self.indent_space)
 
     def od(self, dirpath, prefix):
         leaves = sorted(self.listdir(dirpath))
         if not leaves:
             return
-        fprefix = prefix + '│' + self.space
-        dprefix = prefix + '├' + self.line
+        fprefix = prefix + self.down_space
+        dprefix = prefix + self.vert_horiz
         for leaf in leaves[:-1]:
             path = os.path.join(dirpath, leaf)
             if os.path.isfile(path):
@@ -128,8 +130,8 @@ class Tree():
 
         leaf = leaves[-1]
         path = os.path.join(dirpath, leaf)
-        fprefix = prefix + ' ' + self.space
-        dprefix = prefix + '└' + self.line
+        fprefix = prefix + self.indent_space
+        dprefix = prefix + self.turn_horiz
         if os.path.isfile(path):
             self.tree += dprefix + leaf + '\n'
         if os.path.isdir(path):

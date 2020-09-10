@@ -3,7 +3,7 @@
         "mode": "ff",
         "indent": 4,
         "sparse": false,
-        "show_hidden": true,
+        "show_hidden": false,
         "dir_tail_character": "/"
     }
 }

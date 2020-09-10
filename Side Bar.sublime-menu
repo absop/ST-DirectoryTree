@@ -2,7 +2,7 @@
 	{"caption": "-", "id": "folder_menus"},
 	{
 		"caption": "Copy Directory Tree",
-		"command": "sidebar_make_tree_and_send_to_clipboard",
+		"command": "sidebar_copy_tree",
 		"args": {"paths": []}
 	},
 	{
