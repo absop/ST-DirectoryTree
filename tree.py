@@ -23,7 +23,7 @@ class Tree():
     }
 
     def __init__(self, path, indent=4, mode='ff', sparse=True, dtail='/',
-        show_hidden=False, show_size=False):
+        show_hidden=False, show_size=False, use_absolute_path_of_rootdir=False):
         self.sparse = sparse
         self.dtail = dtail
         self.indent_space = ' ' * indent
@@ -39,6 +39,7 @@ class Tree():
         }
         self.listdir = os.listdir if show_hidden else listdir_nohidden
         self.show_size = show_size
+        self.use_absolute_path_of_rootdir = use_absolute_path_of_rootdir
 
         self.chmod(mode)
         self.generate(path)
@@ -62,10 +63,11 @@ class Tree():
         metadata: [(path, isfile?, size) or None], maybe use to open file
         size: file size, or number of files in a Directory, is a string
         """
-        path = os.path.abspath(path)
         assert os.path.isdir(path)
         self.metadata = []
         self.lines = [path]
+        if not self.use_absolute_path_of_rootdir:
+            self.lines[0] = os.path.basename(path)
         self.traverse(path, '')
 
         if self.lines[-1] == '':
