@@ -25,6 +25,13 @@ Default to be `ff`.
 - `dir_tail_character`, a character that to be append on the directory name, can be empty string.
 
 
+## Examples
+- No show size
+![](images/tree.png)
+- show size
+![](images/tree_show_size.png)
+
+
 ## TODO
+- [x] list `file size` and `number of files in a directory` in left, as a optional feature.
 - [ ] add `syntax highlighting` for directory trees.
-- [ ] list `file size` and `number of files in a directory` in left, as a optional feature.
