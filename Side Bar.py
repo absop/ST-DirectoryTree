@@ -29,7 +29,7 @@ class SidebarMakeTreeCommand(sublime_plugin.WindowCommand):
 
         view = self.window.new_file()
         view.assign_syntax("tree.sublime-syntax")
-        view.set_name("Tree - %s" % os.path.basename(paths[0]))
+        view.set_name("%s.tr" % os.path.basename(paths[0]))
         view.settings().set("font_face", "Lucida Console")
         view.settings().set("word_wrap", False)
         view.settings().set("translate_tabs_to_spaces", True)

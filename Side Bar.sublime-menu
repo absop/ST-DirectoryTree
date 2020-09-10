@@ -1,14 +1,13 @@
 [
-	{"caption": "-", "id": "dir_tree"},
-	{
-		"caption": "View Directory Tree",
-		"command": "sidebar_make_tree",
-		"args": {"paths": []}
-	},
+	{"caption": "-", "id": "folder_menus"},
 	{
 		"caption": "Copy Directory Tree",
 		"command": "sidebar_make_tree_and_send_to_clipboard",
 		"args": {"paths": []}
 	},
-	{"caption": "-"}
+	{
+		"caption": "View Directory Tree",
+		"command": "sidebar_make_tree",
+		"args": {"paths": []}
+	},
 ]
