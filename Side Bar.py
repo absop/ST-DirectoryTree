@@ -43,4 +43,3 @@ class SidebarCopyTreeCommand(SidebarMakeTreeCommand):
         tree = Tree(paths[0], **tree_settings)
 
         sublime.set_clipboard(tree.tree)
-

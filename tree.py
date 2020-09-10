@@ -53,6 +53,8 @@ class Tree():
         assert os.path.isdir(path)
         self.tree = path + '\n'
         self.traverse(path, '')
+        if self.sparse:
+            self.tree = self.tree.rstrip('\n') + '\n'
 
     def get_dirs_files(self, dirpath):
         dirs, files = [], []
