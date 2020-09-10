@@ -1,0 +1,9 @@
+{
+    "args": {
+        "mode": "ff",
+        "indent": 4,
+        "sparse": false,
+        "show_hidden": true,
+        "dir_tail_character": "/"
+    }
+}
