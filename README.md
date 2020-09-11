@@ -35,3 +35,4 @@ Default to be `ff`.
 ## TODO
 - [x] list `file size` and `number of files in a directory` in left, as a optional feature.
 - [ ] add `syntax highlighting` for directory trees.
+- [ ] use `show_input_panel` to input args after click a side bar folder.
