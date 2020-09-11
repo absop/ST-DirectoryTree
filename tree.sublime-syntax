@@ -18,87 +18,22 @@ variables:
 
 contexts:
   main:
-    - match: (ROOTDIR)(:)(\s+({{regex_path}}))?$
+    - match: (mode)(:)\s*([\w\s]+)$
       captures:
-        1: keyword.rootdir.tree
+        1: keyword.mode.tree
         2: punctuation.separator.tree
-        3: entity.name.filename.tree
+        3: entity.name.mode.tree
 
-    - match: (Time)(:)\s*([0-9/:]+)
+    - match: (\d+)\s+((\w:)?[^\"\n:|*<?>]+)
       captures:
-        1: keyword.time.tree
-        2: punctuation.separator.tree
-        3: string.time.tree
+        1: constant.numeric.tree
+        2: entity.name.dirname.tree
 
-    - include: tab-header
+      push: tree-leaves
 
-  tab-header:
-    - match: (Languages)│{{tab_caption}}
-      captures:
-        1: keyword.title.tree
-        2: keyword.title.tree
-        3: keyword.title.tree
-        4: keyword.title.tree
-      push: languages
-
-    - match: (Types)│{{tab_caption}}
-      captures:
-        1: keyword.title.tree
-        2: keyword.title.tree
-        3: keyword.title.tree
-        4: keyword.title.tree
-      push: filetypes
-
-  languages:
-    - match: ^═.+
-      pop: true
-
-    - include: summary
-
-    - match: '{{regex_ident}}│{{tab_content}}'
-      captures:
-        1: entity.name.language.tree
-        3: constant.numeric.tree
-        4: string.unit.tree
-        5: constant.numeric.tree
-        6: constant.numeric.tree
-
-  filetypes:
-    - match: ^═.+
-      push: paths-caption
-
-    - include: summary
-
-    - match: '{{regex_ident}}│{{tab_content}}'
-      captures:
-        1: entity.name.filetype.tree
-        3: constant.numeric.tree
-        4: string.unit.tree
-        5: constant.numeric.tree
-        6: constant.numeric.tree
-
-  summary:
-    - match: (Total)│{{tab_content}}
-      captures:
-        1: keyword.title.tree
-        2: constant.numeric.tree
-        3: string.unit.tree
-        4: constant.numeric.tree
-        5: constant.numeric.tree
-
-  paths-caption:
-    - match: (Size)│\s*(Lines)│\s*(Paths)
-      captures:
-        1: keyword.title.tree
-        2: keyword.title.tree
-        3: keyword.title.tree
-      push: paths-content
-
-  paths-content:
-    - match: ^\s*{{regex_2cols}}│\s+({{regex_path}})$
+  tree-leaves:
+    - match: ([\d.]+)(B|KB|MB|GB)[\s│]+([^\"\n:|*<?>]+)$
       captures:
         1: constant.numeric.tree
         2: string.unit.tree
-        3: constant.numeric.tree
-        4: entity.name.filename.tree
-
+        3: entity.name.filename.tree
