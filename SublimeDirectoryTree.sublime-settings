@@ -1,12 +1,11 @@
 {
     /*
-    "modes": {
-        "df": "Directory First",
-        "do": "Directory Only",
-        "ff": "File First",
-        "od": "Ordered"
-    },
-    */
+     * mode explain:
+     * df: Directory First,
+     * do: Directory Only,
+     * ff: File First,
+     * od: Ordered
+     */
     "args": {
         "mode": "ff",
         "layer": 3,
