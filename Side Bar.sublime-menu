@@ -1,5 +1,5 @@
 [
-	{"caption": "-", "id": "folder_menus"},
+	{"caption": "-", "id": "tree_commands"},
 	{
 		"caption": "Copy Directory Tree",
 		"command": "sidebar_copy_tree",

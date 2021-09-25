@@ -37,3 +37,6 @@ class SidebarCopyTreeCommand(SidebarMakeTreeCommand):
         tree = Tree(paths[0], **tree_settings)
 
         sublime.set_clipboard(tree.tree)
+
+        msg = 'Copied {} lines'.format(tree.tree.count('\n'))
+        sublime.active_window().status_message(msg)

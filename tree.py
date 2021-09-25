@@ -2,9 +2,9 @@ import os
 import sys
 
 def listdir_nohidden(path):
-    for f in os.listdir(path):
-        if not f.startswith('.'):
-            yield f
+    for entry in os.listdir(path):
+        if not entry[0] == '.':
+            yield entry
 
 def str_size(nbyte):
     k = 0
