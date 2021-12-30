@@ -1,10 +1,10 @@
 [
     {
-        "caption": "Preferences: SublimeDirectoryTree Settings",
+        "caption": "Preferences: DirectoryTree Settings",
         "command": "edit_settings",
         "args": {
-          "base_file": "${packages}/SublimeDirectoryTree/SublimeDirectoryTree.sublime-settings",
-          "default": "/*\n\tSublimeDirectoryTree user settings in here override the default\n*/\n{\n\t$0\n}\n"
+          "base_file": "${packages}/DirectoryTree/DirectoryTree.sublime-settings",
+          "default": "/*\n\tDirectoryTree user settings in here override the default\n*/\n{\n\t$0\n}\n"
           }
     }
 ]

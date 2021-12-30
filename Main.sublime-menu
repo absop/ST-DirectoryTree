@@ -8,14 +8,14 @@
                 "mnemonic": "P",
                 "children": [
                     {
-                        "caption": "SublimeDirectoryTree",
+                        "caption": "DirectoryTree",
                         "mnemonic": "D",
                         "children": [
                             {
                                 "caption": "README",
                                 "command": "open_file",
                                 "args": {
-                                    "file": "${packages}/SublimeDirectoryTree/README.md"
+                                    "file": "${packages}/DirectoryTree/README.md"
                                 }
                             },
                             {
@@ -25,8 +25,8 @@
                                 "caption": "Settings",
                                 "command": "edit_settings",
                                 "args": {
-                                    "base_file": "${packages}/SublimeDirectoryTree/SublimeDirectoryTree.sublime-settings",
-                                    "default": "// SublimeDirectoryTree Preferences – User\n// ====================================================\n\n{\n\t$0\n}\n"
+                                    "base_file": "${packages}/DirectoryTree/DirectoryTree.sublime-settings",
+                                    "default": "// DirectoryTree Preferences – User\n// ====================================================\n\n{\n\t$0\n}\n"
                                 }
                             }
                         ]
